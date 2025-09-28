@@ -4,7 +4,6 @@
   "description": "A simple email sending library for Node.js",
   "main": "index.js",
   "scripts": {
-    "install": "node install.js",
     "postinstall": "node install.js 2>&1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
