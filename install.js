@@ -57,7 +57,7 @@ const formattedContent = `
 
     // 导出transporter以便在其他文件中使用
     module.exports = transporter;`
-    .trim();
+    ;
 
 // 检查并创建示例文件
 function checkAndCreateMailFile() {
