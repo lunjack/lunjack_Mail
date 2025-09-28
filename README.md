@@ -10,30 +10,36 @@
 
 ```javascript
 const mail = require('lunjack-mail');
-
-// 邮箱配置
+// 邮箱配置示例 - 请根据您的邮箱服务商修改以下配置
 const transporter = mail.createTransport({
-    host: 'smtp.gmail.com',
+
+    // 邮箱服务商SMTP服务器地址(Gmail: 'smtp.gmail.com'; QQ: 'smtp.qq.com'; 163: 'smtp.163.com')
+    host: 'smtp.your-email-provider.com',
+
+    // 端口号，通常为 465(SSL) 或 587(TLS)
     port: 587,
-    secure: false,
+
+    // 是否使用SSL/TLS
+    secure: false, // true for 465, false for other ports
+
     auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-app-password'
+        user: 'your-email@example.com', // 您的邮箱地址
+
+        // 您的邮箱密码或授权码(Gmail需要应用专用密码，QQ邮箱需要授权码)
+        pass: 'your-password-or-app-password'
     }
 });
 
-// 发送测试邮件
+// 发送邮件示例
 transporter.sendMail({
-    from: 'your-email@gmail.com',
-    to: 'test@example.com',
-    subject: '测试邮件',
-    text: '这是一封测试邮件'
+    from: 'your-email@example.com', // 发件人
+    to: 'recipient@example.com',    // 收件人
+    subject: '测试邮件',             // 邮件主题
+    text: '这是一封测试邮件(text)',         // 纯文本内容
+    html: '<b>这是一封测试邮件(html)</b>'   // HTML内容（可选;注:html内容优先级高于纯文本内容)
 }, (error, info) => {
-    if (error) {
-        console.error('发送失败:', error);
-    } else {
-        console.log('发送成功:', info.response);
-    }
+    if (error)  console.error('发送失败:', error);
+    else console.log('发送成功:', info.response);
 });
 ```
 
@@ -43,7 +49,7 @@ transporter.sendMail({
 const mail = require('lunjack-mail');
 
 // 1. 验证URL格式配置
-const urlConfig = 'smtps://user:pass@smtp.gmail.com:465';
+const urlConfig = 'smtps://user:pass@smtp.your-email-provider.com:465';
 const validation1 = mail.validateConfig(urlConfig);
 if (!validation1.valid) {
     console.error('配置错误:', validation1.errors);
@@ -53,11 +59,11 @@ if (!validation1.valid) {
 
 // 2. 验证对象配置
 const objectConfig = {
-    host: 'smtp.gmail.com',
+    host: 'smtp.your-email-provider.com',
     port: 587,
     secure: false,
     auth: {
-        user: 'test@gmail.com',
+        user: 'your-email@example.com',
         pass: 'password'
     }
 };
@@ -71,10 +77,10 @@ if (validation2.valid) {
 
 // 3. 验证无效配置
 const invalidConfig = {
-    host: 'smtp.gmail.com',
+   host: 'smtp.your-email-provider.com',
     port: 70000, // 无效端口
     auth: {
-        user: 'test@gmail.com'
+        user: 'your-email@example.com'
         // 缺少密码
     }
 };
