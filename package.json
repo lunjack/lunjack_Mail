@@ -1,0 +1,45 @@
+{
+  "name": "lunjack-mail",
+  "version": "1.0.0",
+  "description": "A simple email sending library for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "install": "node install.js",
+    "postinstall": "node install.js 2>&1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "install": "node install.js",
+  "bin": {
+    "env-init": "./install.js"
+  },
+  "files": [
+    "index.js",
+    "install.js",
+    "index.d.ts",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "mail",
+    "email",
+    "smtp",
+    "sendmail",
+    "lunjack"
+  ],
+  "author": "lunjack <china@lunjack.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lunjack/lunjack_Mail.git"
+  },
+  "homepage": "https://www.npmjs.com/package/lunjack-mail#readme",
+  "bugs": {
+    "url": "https://github.com/lunjack/lunjack_Mail/issues"
+  },
+  "license": "ISC",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "type": "commonjs",
+  "directories": {
+    "lib": "./"
+  }
+}

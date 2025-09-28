@@ -1,0 +1,12 @@
+# 忽略版本控制
+.git/
+.gitignore
+.gitattributes
+publish.ps1
+.npmrc
+
+# 忽略IDE文件
+.idea/
+.vscode/
+
+维护.md
