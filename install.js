@@ -32,8 +32,8 @@ transporter.sendMail({
     from: 'your-email@example.com', // 发件人
     to: 'recipient@example.com',    // 收件人
     subject: '测试邮件',             // 邮件主题
-    text: '这是一封测试邮件',         // 纯文本内容
-    html: '<b>这是一封测试邮件</b>'   // HTML内容（可选）
+    text: '这是一封测试邮件(text)',         // 纯文本内容
+    html: '<b>这是一封测试邮件(html)</b>'   // HTML内容（可选;注:html内容优先级高于纯文本内容)
 }, (error, info) => {
     if (error)  console.error('发送失败:', error);
     else console.log('发送成功:', info.response);
