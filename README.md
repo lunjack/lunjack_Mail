@@ -87,3 +87,94 @@ const invalidConfig = {
 const validation3 = mail.validateConfig(invalidConfig);
 console.log('无效配置验证结果:', validation3);
 ```
+```javascript
+/*
+// 用法示例：
+
+// 1. 创建DKIM实例
+let dkim = new DKIM({
+    domainName: 'example.com',        // 域名，用于标识签名来源
+    keySelector: 'key-selector',      // 密钥选择器，用于在DNS中查找公钥
+    privateKey,                       // RSA私钥，用于生成数字签名
+    cacheDir: '/tmp'                  // 缓存目录，用于处理大邮件时的临时存储
+});
+
+// 2. 对邮件进行签名
+dkim.sign(input).pipe(process.stdout);
+
+// 参数说明：
+// - input: 输入邮件内容，可以是以下类型：
+//   * Stream (流)：可读流，包含RFC822格式的原始邮件
+//   * String (字符串)：邮件内容的字符串形式
+//   * Buffer (缓冲区)：邮件内容的二进制缓冲区
+//
+// - 返回值：一个可读流，包含已添加DKIM签名的完整邮件
+//
+// 工作流程：
+// 1. 解析输入邮件的头部和正文
+// 2. 对邮件正文进行规范化处理并计算哈希值
+// 3. 使用私钥对指定邮件头字段和正文哈希进行签名
+// 4. 在邮件头部添加DKIM-Signature字段
+// 5. 输出完整的已签名邮件
+*/
+```
+---
+## DKIM签名使用示例：
+
+```javascript
+// 引入DKIM模块
+const DKIM = require('./dkim');
+
+// 示例1：基本用法
+const privateKey = `-----BEGIN RSA PRIVATE KEY-----
+...你的私钥内容...
+-----END RSA PRIVATE KEY-----`;
+
+const dkim = new DKIM({
+    domainName: 'mycompany.com',     // 你的域名
+    keySelector: '2024',             // 密钥版本标识，通常用年月
+    privateKey: privateKey,          // RSA私钥
+    cacheDir: '/tmp/dkim-cache'      // 可选：缓存目录
+});
+
+// 示例2：签名字符串格式的邮件
+const emailString = `From: sender@mycompany.com
+To: recipient@example.com
+Subject: 测试邮件
+
+这是邮件正文内容。`;
+
+const signedStream = dkim.sign(emailString);
+signedStream.pipe(process.stdout);  // 输出到控制台
+// 或者保存到文件：signedStream.pipe(fs.createWriteStream('signed_email.eml'));
+
+// 示例3：签名流式输入的邮件
+const fileStream = fs.createReadStream('original_email.eml');
+dkim.sign(fileStream).pipe(fs.createWriteStream('signed_email.eml'));
+
+// 示例4：使用多个密钥（用于密钥轮换）
+const dkimMulti = new DKIM({
+    keys: [
+        {
+            domainName: 'mycompany.com',
+            keySelector: '2024',
+            privateKey: newPrivateKey
+        },
+        {
+            domainName: 'mycompany.com',
+            keySelector: '2023',
+            privateKey: oldPrivateKey  // 旧密钥，用于兼容性
+        }
+    ]
+});
+// 这样会为同一封邮件生成两个DKIM签名
+```
+
+## 关键概念说明：
+
+- **domainName**：你的域名，收件方会用这个域名在DNS中查找公钥
+- **keySelector**：密钥标识符，允许同一域名下有多个密钥
+- **privateKey**：RSA私钥，用于生成数字签名
+- **DNS记录**：需要在域名DNS中添加TXT记录，格式为：`[keySelector]._domainkey.[domainName]`，包含公钥信息
+
+这样邮件接收方就能验证邮件确实来自你的域名且未被篡改。
