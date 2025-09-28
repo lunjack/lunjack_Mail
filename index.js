@@ -12,14 +12,14 @@
  * - JSONTransport: JSON传输器，将邮件转换为JSON格式输出，用于调试
  * - SESTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
  */
-const Mailer = require('./mailer');
-const shared = require('./shared');
-const SMTPPool = require('./smtp-pool');
-const SMTPTransport = require('./smtp-transport');
-const SendmailTransport = require('./sendmail-transport');
-const StreamTransport = require('./stream-transport');
-const JSONTransport = require('./json-transport');
-const SESTransport = require('./ses-transport');
+const Mailer = require('./lib/mailer');
+const shared = require('./lib/shared');
+const SMTPPool = require('./lib/smtp-pool');
+const SMTPTransport = require('./lib/smtp-transport');
+const SendmailTransport = require('./lib/sendmail-transport');
+const StreamTransport = require('./lib/stream-transport');
+const JSONTransport = require('./lib/json-transport');
+const SESTransport = require('./lib/ses-transport');
 
 module.exports.createTransport = function (transporter, defaults) {
     let urlConfig;
