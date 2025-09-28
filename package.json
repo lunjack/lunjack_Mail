@@ -8,9 +8,8 @@
     "postinstall": "node install.js 2>&1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "install": "node install.js",
   "bin": {
-    "env-init": "./install.js"
+    "mail-init": "./install.js"
   },
   "files": [
     "index.js",
