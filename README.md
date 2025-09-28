@@ -87,35 +87,3 @@ const invalidConfig = {
 const validation3 = mail.validateConfig(invalidConfig);
 console.log('无效配置验证结果:', validation3);
 ```
-```javascript
-/*
-// 用法示例：
-
-// 1. 创建DKIM实例
-let dkim = new DKIM({
-    domainName: 'example.com',        // 域名，用于标识签名来源
-    keySelector: 'key-selector',      // 密钥选择器，用于在DNS中查找公钥
-    privateKey,                       // RSA私钥，用于生成数字签名
-    cacheDir: '/tmp'                  // 缓存目录，用于处理大邮件时的临时存储
-});
-
-// 2. 对邮件进行签名
-dkim.sign(input).pipe(process.stdout);
-
-// 参数说明：
-// - input: 输入邮件内容，可以是以下类型：
-//   * Stream (流)：可读流，包含RFC822格式的原始邮件
-//   * String (字符串)：邮件内容的字符串形式
-//   * Buffer (缓冲区)：邮件内容的二进制缓冲区
-//
-// - 返回值：一个可读流，包含已添加DKIM签名的完整邮件
-//
-// 工作流程：
-// 1. 解析输入邮件的头部和正文
-// 2. 对邮件正文进行规范化处理并计算哈希值
-// 3. 使用私钥对指定邮件头字段和正文哈希进行签名
-// 4. 在邮件头部添加DKIM-Signature字段
-// 5. 输出完整的已签名邮件
-*/
-```
----
