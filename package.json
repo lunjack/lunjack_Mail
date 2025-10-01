@@ -1,42 +1,78 @@
 {
   "name": "lunjack-mail",
   "version": "1.0.0",
-  "description": "A simple email sending library for Node.js",
+  "description": "A powerful and flexible email sending library for Node.js with multiple transport support (SMTP, SMTP Pool, Sendmail, Stream, JSON, SES)",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "postinstall": "node install.js 2>&1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "lint": "eslint .",
+    "build": "echo 'No build process required'"
   },
   "bin": {
-    "mail-init": "./install.js"
+    "lunjack-mail-init": "./install.js",
+    "lunjack-mail": "./index.js"
   },
   "files": [
     "index.js",
-    "lib",
-    "install.js",
     "index.d.ts",
-    "CHANGELOG.md"
+    "lib/",
+    "install.js",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE"
   ],
   "keywords": [
     "mail",
     "email",
+    "lunjack",
     "smtp",
     "sendmail",
-    "lunjack"
+    "ses",
+    "aws",
+    "transport",
+    "smtp-pool",
+    "email-sender",
+    "mailer"
   ],
   "author": "lunjack <china@lunjack.com>",
+  "contributors": [
+    "lunjack <china@lunjack.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lunjack/lunjack_Mail.git"
   },
   "homepage": "https://www.npmjs.com/package/lunjack-mail#readme",
   "bugs": {
-    "url": "https://github.com/lunjack/lunjack_Mail/issues"
+    "url": "https://github.com/lunjack/lunjack_Mail/issues",
+    "email": "china@lunjack.com"
   },
   "license": "ISC",
   "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0"
+  },
+  "peerDependencies": {
     "node": ">=10.0.0"
   },
-  "type": "commonjs",
-  "directories": {}
+  "directories": {
+    "lib": "lib",
+    "example": "examples",
+    "test": "tests"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
