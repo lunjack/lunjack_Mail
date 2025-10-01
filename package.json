@@ -1,6 +1,6 @@
 {
   "name": "lunjack-mail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A powerful and flexible email sending library for Node.js with multiple transport support (SMTP, SMTP Pool, Sendmail, Stream, JSON, SES)",
   "main": "index.js",
   "type": "commonjs",
