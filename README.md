@@ -23,7 +23,7 @@ graph TD
 ## 安装
 
 ```bash
-npm install lunjack-mail
+npm i lunjack-mail
 ```
 
 ## 优势
