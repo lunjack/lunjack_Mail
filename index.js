@@ -64,10 +64,9 @@ module.exports.validateConfig = function (config) {
     }
 
     // 如果是字符串（URL格式）
-    if (typeof config === 'string') {
-        if (!/^(smtps?|direct):/i.test(config)) errors.push('URL格式不正确，应以 smtp://, smtps:// 或 direct:// 开头');
-    }
-    // 如果是配置对象
+    if (typeof config === 'string' && !/^(smtps?|direct):/i.test(config))
+        errors.push('URL格式不正确，应以 smtp://, smtps:// 或 direct:// 开头');
+    // 否则,如果是配置对象
     else if (typeof config === 'object') {
         // 检查传输器类型
         const transportTypes = ['SMTP', 'Sendmail', 'Stream', 'JSON', 'SES'];
@@ -106,9 +105,8 @@ module.exports.validateConfig = function (config) {
             errors.push('maxMessages 应为大于0的数字');
 
         // 验证Sendmail配置
-        if (config.sendmail) {
-            if (config.sendmail !== true && typeof config.sendmail !== 'string') errors.push('sendmail 字段应为布尔值或字符串路径');
-        }
+        if (config.sendmail && config.sendmail !== true && typeof config.sendmail !== 'string')
+            errors.push('sendmail 字段应为布尔值或字符串路径');
 
         // 验证SES配置
         if (config.SES) {
