@@ -6,20 +6,20 @@
  * - Mailer: 核心邮件发送器，负责管理传输器和邮件发送流程
  * - shared: 共享工具函数模块，包含URL解析等通用功能
  * - SmtpPool: SMTP连接池传输器，支持连接复用和并发发送
- * - SMTPTransport: 标准SMTP传输器，用于通过SMTP服务器发送邮件
+ * - SmtpTransport: 标准SMTP传输器，用于通过SMTP服务器发送邮件
  * - SendmailTransport: 本地sendmail传输器，使用系统sendmail命令发送
  * - StreamTransport: 流传输器，将邮件输出为流格式，主要用于测试
- * - JSONTransport: JSON传输器，将邮件转换为JSON格式输出，用于调试
- * - SESTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
+ * - JsonTransport: JSON传输器，将邮件转换为JSON格式输出，用于调试
+ * - SesTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
  */
 const Mailer = require('./lib/mailer');
 const shared = require('./lib/shared');
 const SmtpPool = require('./lib/smtp-pool');
-const SMTPTransport = require('./lib/smtp-transport');
+const SmtpTransport = require('./lib/smtp-transport');
 const SendmailTransport = require('./lib/sendmail-transport');
 const StreamTransport = require('./lib/stream-transport');
-const JSONTransport = require('./lib/json-transport');
-const SESTransport = require('./lib/ses-transport');
+const JsonTransport = require('./lib/json-transport');
+const SesTransport = require('./lib/ses-transport');
 
 module.exports.createTransport = function (transporter, defaults) {
     let urlConfig;
@@ -37,15 +37,15 @@ module.exports.createTransport = function (transporter, defaults) {
         if (options.pool) transporter = new SmtpPool(options);
         else if (options.sendmail) transporter = new SendmailTransport(options);
         else if (options.streamTransport) transporter = new StreamTransport(options);
-        else if (options.jsonTransport) transporter = new JSONTransport(options);
+        else if (options.jsonTransport) transporter = new JsonTransport(options);
         else if (options.SES) {
             if (options.SES.ses && options.SES.aws) {
                 let error = new Error('检测到旧版SES配置，请使用@aws-sdk/client-sesv2，');
                 error.code = 'LegacyConfig';
                 throw error;
             }
-            transporter = new SESTransport(options);
-        } else transporter = new SMTPTransport(options);
+            transporter = new SesTransport(options);
+        } else transporter = new SmtpTransport(options);
     }
 
     mailer = new Mailer(transporter, options, defaults);
