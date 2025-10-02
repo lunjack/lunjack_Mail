@@ -21,7 +21,8 @@ const StreamTransport = require('./lib/stream-transport');
 const JsonTransport = require('./lib/json-transport');
 const SesTransport = require('./lib/ses-transport');
 
-module.exports.createTransport = function (transporter, defaults) {
+// 创建传输器函数
+function createTransport(transporter, defaults) {
     let urlConfig;
     let options;
     let mailer;
@@ -50,10 +51,10 @@ module.exports.createTransport = function (transporter, defaults) {
 
     mailer = new Mailer(transporter, options, defaults);
     return mailer;
-};
+}
 
-// 验证配置
-module.exports.validateConfig = function (config) {
+// 验证配置函数
+function validateConfig(config) {
     const errors = [];
     const warnings = [];
 
@@ -111,7 +112,6 @@ module.exports.validateConfig = function (config) {
         // 验证SES配置
         if (config.SES) {
             if (typeof config.SES !== 'object') errors.push('SES 配置应为对象');
-
             else if (config.SES.ses && config.SES.aws) warnings.push('检测到旧版SES配置，建议使用新版AWS SDK');
         }
     }
@@ -122,4 +122,10 @@ module.exports.validateConfig = function (config) {
         errors,
         warnings: warnings.length > 0 ? warnings : undefined
     };
+}
+
+// 统一导出
+module.exports = {
+    createTransport,
+    validateConfig
 };
