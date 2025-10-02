@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Nodemailer 主模块
+ * mailer 主模块
  *
  * 模块依赖说明：
  * - Mailer: 核心邮件发送器，负责管理传输器和邮件发送流程
