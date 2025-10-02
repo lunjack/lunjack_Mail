@@ -5,7 +5,7 @@
  * 模块依赖说明：
  * - Mailer: 核心邮件发送器，负责管理传输器和邮件发送流程
  * - shared: 共享工具函数模块，包含URL解析等通用功能
- * - SMTPPool: SMTP连接池传输器，支持连接复用和并发发送
+ * - SmtpPool: SMTP连接池传输器，支持连接复用和并发发送
  * - SMTPTransport: 标准SMTP传输器，用于通过SMTP服务器发送邮件
  * - SendmailTransport: 本地sendmail传输器，使用系统sendmail命令发送
  * - StreamTransport: 流传输器，将邮件输出为流格式，主要用于测试
@@ -14,7 +14,7 @@
  */
 const Mailer = require('./lib/mailer');
 const shared = require('./lib/shared');
-const SMTPPool = require('./lib/smtp-pool');
+const SmtpPool = require('./lib/smtp-pool');
 const SMTPTransport = require('./lib/smtp-transport');
 const SendmailTransport = require('./lib/sendmail-transport');
 const StreamTransport = require('./lib/stream-transport');
@@ -34,7 +34,7 @@ module.exports.createTransport = function (transporter, defaults) {
             options = shared.parseConnectionUrl(urlConfig);
         else options = transporter;
 
-        if (options.pool) transporter = new SMTPPool(options);
+        if (options.pool) transporter = new SmtpPool(options);
         else if (options.sendmail) transporter = new SendmailTransport(options);
         else if (options.streamTransport) transporter = new StreamTransport(options);
         else if (options.jsonTransport) transporter = new JSONTransport(options);
