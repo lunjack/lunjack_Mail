@@ -13,7 +13,7 @@
  * - SesTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
  */
 const Mailer = require('./lib/mailer');
-const shared = require('./lib/shared');
+const { parseConnectionUrl } = require('./lib/shared');
 const SmtpPool = require('./lib/smtp-pool');
 const SmtpTransport = require('./lib/smtp-transport');
 const SendmailTransport = require('./lib/sendmail-transport');
@@ -32,7 +32,7 @@ function createTransport(transporter, defaults) {
         (typeof transporter === 'string' && /^(smtps?|direct):/i.test(transporter))) {
         // 将配置URL解析为配置选项
         if ((urlConfig = typeof transporter === 'string' ? transporter : transporter.url))
-            options = shared.parseConnectionUrl(urlConfig);
+            options = parseConnectionUrl(urlConfig);
         else options = transporter;
 
         if (options.pool) transporter = new SmtpPool(options);
