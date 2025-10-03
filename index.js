@@ -21,7 +21,7 @@ const JsonTransport = require('./lib/json-transport');
 const SesTransport = require('./lib/ses-transport');
 const { parseConnectionUrl } = require('./lib/shared');
 
-// 创建传输器函数
+// 创建传输器
 function createTransport(transporter, defaults) {
     let urlConfig;
     let options;
@@ -53,7 +53,7 @@ function createTransport(transporter, defaults) {
     return mailer;
 }
 
-// 验证配置函数
+// 验证配置
 function validateConfig(config) {
     const errors = [];
     const warnings = [];
@@ -124,7 +124,7 @@ function validateConfig(config) {
     };
 }
 
-// 统一导出
+// 导出
 module.exports = {
     createTransport,
     validateConfig
