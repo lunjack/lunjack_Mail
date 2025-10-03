@@ -4,22 +4,22 @@
  *
  * 模块依赖说明：
  * - Mailer: 核心邮件发送器，负责管理传输器和邮件发送流程
- * - shared: 共享工具函数模块，包含URL解析等通用功能
  * - SmtpPool: SMTP连接池传输器，支持连接复用和并发发送
  * - SmtpTransport: 标准SMTP传输器，用于通过SMTP服务器发送邮件
  * - SendmailTransport: 本地sendmail传输器，使用系统sendmail命令发送
  * - StreamTransport: 流传输器，将邮件输出为流格式，主要用于测试
  * - JsonTransport: JSON传输器，将邮件转换为JSON格式输出，用于调试
  * - SesTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
+ * - shared: 共享工具函数模块，包含URL解析等通用功能
  */
 const Mailer = require('./lib/mailer');
-const { parseConnectionUrl } = require('./lib/shared');
 const SmtpPool = require('./lib/smtp-pool');
 const SmtpTransport = require('./lib/smtp-transport');
 const SendmailTransport = require('./lib/sendmail-transport');
 const StreamTransport = require('./lib/stream-transport');
 const JsonTransport = require('./lib/json-transport');
 const SesTransport = require('./lib/ses-transport');
+const { parseConnectionUrl } = require('./lib/shared');
 
 // 创建传输器函数
 function createTransport(transporter, defaults) {
