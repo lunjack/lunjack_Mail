@@ -31,8 +31,7 @@ function createTransport(transporter, defaults) {
     if ((typeof transporter === 'object' && typeof transporter.send !== 'function') ||
         (typeof transporter === 'string' && /^(smtps?|direct):/i.test(transporter))) {
         // 将配置URL解析为配置选项
-        if ((urlConfig = typeof transporter === 'string' ? transporter : transporter.url))
-            options = parseConnectionUrl(urlConfig);
+        if ((urlConfig = typeof transporter === 'string' ? transporter : transporter.url)) options = parseConnectionUrl(urlConfig);
         else options = transporter;
 
         if (options.pool) transporter = new SmtpPool(options);
