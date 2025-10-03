@@ -45,7 +45,8 @@ function createTransport(transporter, defaults) {
                 throw error;
             }
             transporter = new SesTransport(options);
-        } else transporter = new SmtpTransport(options);
+        }
+        else transporter = new SmtpTransport(options);
     }
 
     mailer = new Mailer(transporter, options, defaults);
