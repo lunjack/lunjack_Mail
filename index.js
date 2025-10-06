@@ -12,6 +12,7 @@
  * - SesTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
  * - shared: 共享工具函数模块，包含URL解析等通用功能
  */
+const { regexs } = require('./lib/regexs');
 const Mailer = require('./lib/mailer');
 const SmtpPool = require('./lib/smtp-pool');
 const SmtpTransport = require('./lib/smtp-transport');
@@ -29,7 +30,7 @@ function createTransport(transporter, defaults) {
 
     // 如果传入的transporter是配置对象而非传输器插件,或者看起来像是连接URL
     if ((typeof transporter === 'object' && typeof transporter.send !== 'function') ||
-        (typeof transporter === 'string' && /^(smtps?|direct):/i.test(transporter))) {
+        (typeof transporter === 'string' && regexs.TRANSPORTER_PROTOCOL.test(transporter))) {
         // 将配置URL解析为配置选项
         if ((urlConfig = typeof transporter === 'string' ? transporter : transporter.url)) options = parseConnectionUrl(urlConfig);
         else options = transporter;
@@ -65,7 +66,7 @@ function validateConfig(config) {
     }
 
     // 如果是字符串（URL格式）
-    if (typeof config === 'string' && !/^(smtps?|direct):/i.test(config))
+    if (typeof config === 'string' && !regexs.TRANSPORTER_PROTOCOL.test(config))
         errors.push('URL格式不正确，应以 smtp://, smtps:// 或 direct:// 开头');
     // 否则,如果是配置对象
     else if (typeof config === 'object') {
