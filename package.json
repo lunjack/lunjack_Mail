@@ -53,15 +53,15 @@
   },
   "license": "ISC",
   "engines": {
-    "node": ">=10.0.0",
+    "node": ">=16.0.0",
     "npm": ">=6.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0"
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0"
   },
   "peerDependencies": {
     "node": ">=16.0.0"
