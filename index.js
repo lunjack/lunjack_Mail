@@ -10,9 +10,8 @@
  * - StreamTransport: 流传输器，将邮件输出为流格式，主要用于测试
  * - JsonTransport: JSON传输器，将邮件转换为JSON格式输出，用于调试
  * - SesTransport: Amazon SES传输器，通过AWS Simple Email Service发送邮件
- * - shared: 共享工具函数模块，包含URL解析等通用功能
+ * - shared: 共享工具函数模块，包含URL解析,正则常量等通用功能
  */
-const { regexs } = require('./lib/regexs');
 const Mailer = require('./lib/mailer');
 const SmtpPool = require('./lib/smtp-pool');
 const SmtpTransport = require('./lib/smtp-transport');
@@ -20,7 +19,7 @@ const SendmailTransport = require('./lib/sendmail-transport');
 const StreamTransport = require('./lib/stream-transport');
 const JsonTransport = require('./lib/json-transport');
 const SesTransport = require('./lib/ses-transport');
-const { parseConnectionUrl } = require('./lib/shared');
+const { parseConnectionUrl, regexs } = require('./lib/shared');
 
 // 创建传输器
 function createTransport(transporter, defaults) {
