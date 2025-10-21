@@ -24,16 +24,13 @@ const { parseConnectionUrl } = require('./lib/shared');
 
 // 创建传输器
 function createTransport(transporter, defaults) {
-    let urlConfig;
+    const urlConfig = typeof transporter === 'string' ? transporter : transporter.url;
     let options;
-    let mailer;
 
     // 如果传入的transporter是配置对象而非传输器插件,或者看起来像是连接URL
     if ((typeof transporter === 'object' && typeof transporter.send !== 'function') ||
         (typeof transporter === 'string' && regexs.TRANSPORTER_PROTOCOL.test(transporter))) {
-        // 将配置URL解析为配置选项
-        if ((urlConfig = typeof transporter === 'string' ? transporter : transporter.url)) options = parseConnectionUrl(urlConfig);
-        else options = transporter;
+        options = urlConfig && parseConnectionUrl(urlConfig) || transporter;  // 将配置URL解析为配置选项
 
         if (options.pool) transporter = new SmtpPool(options);
         else if (options.sendmail) transporter = new SendmailTransport(options);
@@ -50,7 +47,7 @@ function createTransport(transporter, defaults) {
         else transporter = new SmtpTransport(options);
     }
 
-    mailer = new Mailer(transporter, options, defaults);
+    const mailer = new Mailer(transporter, options, defaults);
     return mailer;
 }
 
