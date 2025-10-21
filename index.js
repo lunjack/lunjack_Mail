@@ -53,14 +53,14 @@ function createTransport(transporter, defaults) {
 
 // 验证配置
 function validateConfig(config) {
-    const errors = [];
-    const warnings = [];
+    const errors = [], warnings = [];
 
     // 检查配置类型
     if (!config) {
         errors.push('配置不能为空');
         return { valid: false, errors, warnings };
     }
+    const { host, service, auth, port, secure, tls, pool, maxConnections, maxMessages, sendmail, SES } = config;
 
     // 如果是字符串（URL格式）
     if (typeof config === 'string' && !regexs.TRANSPORTER_PROTOCOL.test(config))
@@ -75,42 +75,33 @@ function validateConfig(config) {
 
         if (!hasTransportType && typeof config.send !== 'function') {
             // 默认为SMTP传输器，验证SMTP相关配置
-            if (!config.host && !config.service) errors.push('必须指定 host 或 service');
+            if (!host && !service) errors.push('必须指定 host 或 service');
 
-            if (config.auth) {
-                if (!config.auth.user) errors.push('认证配置中缺少 user 字段');
-                if (!config.auth.pass && !config.auth.oauth2 && !config.auth.xoauth2)
-                    warnings.push('认证配置中缺少 pass 字段，将尝试无密码连接');
+            if (auth) {
+                if (!auth.user) errors.push('认证配置中缺少 user 字段');
+                if (!auth.pass && !auth.oauth2 && !auth.xoauth2) warnings.push('认证配置中缺少 pass 字段，将尝试无密码连接');
             }
             // 非25端口通常需要认证
-            else if (config.port !== 25) warnings.push('未提供认证信息，某些邮件服务器可能拒绝连接');
+            else if (port !== 25) warnings.push('未提供认证信息，某些邮件服务器可能拒绝连接');
 
-            if (config.port && (config.port < 1 || config.port > 65535)) errors.push('端口号应在 1-65535 范围内');
-
+            if (port && (port < 1 || port > 65535)) errors.push('端口号应在 1-65535 范围内');
             // 检查TLS/SSL配置
-            if (config.secure !== undefined && typeof config.secure !== 'boolean') errors.push('secure 字段应为布尔值');
-
-            if (config.tls !== undefined && typeof config.tls !== 'object' && typeof config.tls !== 'boolean')
-                errors.push('tls 字段应为对象或布尔值');
+            if (secure !== undefined && typeof secure !== 'boolean') errors.push('secure 字段应为布尔值');
+            if (tls !== undefined && typeof tls !== 'object' && typeof tls !== 'boolean') errors.push('tls 字段应为对象或布尔值');
         }
 
         // 验证池配置
-        if (config.pool && typeof config.pool !== 'boolean') errors.push('pool 字段应为布尔值');
-
-        if (config.maxConnections && (typeof config.maxConnections !== 'number' || config.maxConnections < 1))
-            errors.push('maxConnections 应为大于0的数字');
-
-        if (config.maxMessages && (typeof config.maxMessages !== 'number' || config.maxMessages < 1))
-            errors.push('maxMessages 应为大于0的数字');
+        if (pool && typeof pool !== 'boolean') errors.push('pool 字段应为布尔值');
+        if (maxConnections && (typeof maxConnections !== 'number' || maxConnections < 1)) errors.push('maxConnections 应为大于0的数字');
+        if (maxMessages && (typeof maxMessages !== 'number' || maxMessages < 1)) errors.push('maxMessages 应为大于0的数字');
 
         // 验证Sendmail配置
-        if (config.sendmail && config.sendmail !== true && typeof config.sendmail !== 'string')
-            errors.push('sendmail 字段应为布尔值或字符串路径');
+        if (sendmail && sendmail !== true && typeof sendmail !== 'string') errors.push('sendmail 字段应为布尔值或字符串路径');
 
         // 验证SES配置
-        if (config.SES) {
-            if (typeof config.SES !== 'object') errors.push('SES 配置应为对象');
-            else if (config.SES.ses && config.SES.aws) warnings.push('检测到旧版SES配置，建议使用新版AWS SDK');
+        if (SES) {
+            if (typeof SES !== 'object') errors.push('SES 配置应为对象');
+            else if (SES.ses && SES.aws) warnings.push('检测到旧版SES配置，建议使用新版AWS SDK');
         }
     }
     else errors.push('配置应为字符串或对象');
