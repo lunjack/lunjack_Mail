@@ -101,26 +101,29 @@ function _handleRedirect(res, url, options, fetchRes, finishedFlag, req) {
 
 // 核心fetch函数实现
 function nmfetch(url, options = {}) {
-    const { fetchRes: fetchRes_, cookies, redirects = 0, maxRedirects, method = '', headers: headers_, userAgent, } = options;
     // 设置默认响应流、Cookie管理器和重定向计数器
-    const fetchRes = fetchRes_ || new PassThrough(); // 获取响应流
-    const newCookies = cookies || new Cookies();
-    options.redirects = redirects;
-    options.maxRedirects = isNaN(maxRedirects) ? MAX_REDIRECTS : maxRedirects;
+    options.fetchRes = options.fetchRes || new PassThrough();
+    options.cookies = options.cookies || new Cookies();
+    options.redirects = options.redirects || 0;
+    options.maxRedirects = isNaN(options.maxRedirects) ? MAX_REDIRECTS : options.maxRedirects;
 
     // 处理传入的Cookie选项
-    if (newCookies) {
-        [].concat(newCookies).forEach(cookie => newCookies.set(cookie, url));
-        options.cookies = false;
+    if (options.cookie) {
+        [].concat(options.cookie).forEach(cookie => options.cookies.set(cookie, url));
+        options.cookie = false;
     }
+
+    const fetchRes = options.fetchRes;     // 获取响应流
+    const finishedFlag = { value: false }; // 使用对象包装finished标志，便于在函数间传递引用
 
     // 解析URL
     const parsedResult = _parseUrl(url, fetchRes);
     if (!parsedResult.success) return fetchRes;
-    const { protocol, hostname: host, pathname, search = '', port, username, password } = parsedResult.result;
+    const { protocol, hostname, pathname, search, port, username, password } = parsedResult.result;
 
     // 确定HTTP方法，默认为GET
-    let newMethod = method.toString().trim().toUpperCase() || 'GET';
+    let method = (options.method || '').toString().trim().toUpperCase() || 'GET';
+    let cookies;
     const handler = protocol === 'https:' ? https : http;
 
     // 设置默认请求头
@@ -130,37 +133,36 @@ function nmfetch(url, options = {}) {
     };
 
     // 合并用户自定义头部
-    Object.keys(headers_ || {}).forEach(key => headers[key.toLowerCase().trim()] = headers_[key]);
+    Object.keys(options.headers || {}).forEach(key => headers[key.toLowerCase().trim()] = options.headers[key]);
 
     // 设置自定义User-Agent（如果提供）
-    if (userAgent) headers['user-agent'] = userAgent;
+    if (options.userAgent) headers['user-agent'] = options.userAgent;
 
     // 如果URL中包含认证信息，则设置Authorization头
     if (username || password) {
         const auth = `${username}:${password}`;
-        headers.Authorization = `Basic ${Buffer.from(auth).toString('base64')}`;
+        headers.Authorization = 'Basic ' + Buffer.from(auth).toString('base64');
     }
 
-    const cookie = newCookies.get(url);
     // 获取并设置Cookie(如果有)
-    if (cookie) headers.cookie = cookie;
+    if ((cookies = options.cookies.get(url))) headers.cookie = cookies;
 
     // 处理请求体
-    const finishedFlag = { value: false }; // 使用对象包装finished标志，便于在函数间传递引用
     const bodyResult = _processRequestBody(options, url, fetchRes, finishedFlag);
     if (!bodyResult.success) return fetchRes;
-    newMethod = newMethod || 'POST'; // 默认 POST 方法
-    const { tls, timeout } = options;
+    method = method || 'POST'; // 默认 POST 方法
+
     let req;
     // 配置请求选项
     const reqOptions = {
-        method: newMethod, host, path: pathname + search, port: port ? port : protocol === 'https:' ? 443 : 80, headers,
-        rejectUnauthorized: false, agent: false // 不验证SSL证书,不使用连接池
+        method, host: hostname, path: pathname + (search || ''), port: port ? port : protocol === 'https:' ? 443 : 80, headers,
+        rejectUnauthorized: false, // 不验证SSL证书
+        agent: false               // 不使用连接池
     };
 
-    if (tls) Object.assign(reqOptions, tls); // 合并TLS选项
+    if (options.tls) Object.assign(reqOptions, options.tls); // 合并TLS选项
     // 处理HTTPS协议的SNI
-    if (protocol === 'https:' && host && !NET.isIP(host) && !reqOptions.servername) reqOptions.servername = host;
+    if (protocol === 'https:' && hostname && !NET.isIP(hostname) && !reqOptions.servername) reqOptions.servername = hostname;
 
     // 创建请求对象
     try {
@@ -171,10 +173,11 @@ function nmfetch(url, options = {}) {
     }
 
     // 设置超时处理
-    if (timeout) {
-        req.setTimeout(timeout, () => {
+    if (options.timeout) {
+        req.setTimeout(options.timeout, () => {
             const err = new Error('Request Timeout');
-            _markFinishedWithError(finishedFlag, fetchRes, err, url), req.destroy();
+            _markFinishedWithError(finishedFlag, fetchRes, err, url);
+            req.destroy();
         });
     }
 
@@ -196,31 +199,35 @@ function nmfetch(url, options = {}) {
 
         // 如果响应中的Set-Cookie头为真，则存储Cookie
         const setCookie = res.headers['set-cookie'];
-        if (setCookie) [].concat(setCookie).forEach(cookie => newCookies.set(cookie, url));
+        if (setCookie) [].concat(setCookie).forEach(cookie => options.cookies.set(cookie, url));
 
         // 处理重定向
         if (_handleRedirect(res, url, options, fetchRes, finishedFlag, req)) return;
 
         // 设置响应状态码和头部
-        fetchRes.statusCode = res.statusCode, fetchRes.headers = res.headers;
+        fetchRes.statusCode = res.statusCode;
+        fetchRes.headers = res.headers;
 
         // 检查状态码是否允许
         if (res.statusCode >= 300 && !options.allowErrorResponse) {
             const err = new Error(`响应状态码无效:${res.statusCode}`);
-            _markFinishedWithError(finishedFlag, fetchRes, err, url), req.destroy();
+            _markFinishedWithError(finishedFlag, fetchRes, err, url);
+            req.destroy();
             return;
         }
 
         // 处理响应错误
         res.on('error', err => {
-            _markFinishedWithError(finishedFlag, fetchRes, err, url), req.destroy();
+            _markFinishedWithError(finishedFlag, fetchRes, err, url);
+            req.destroy();
         });
 
         // 将响应流pipe到输出流，支持解压
         if (inflate) {
             res.pipe(inflate).pipe(fetchRes);
             inflate.on('error', err => {
-                _markFinishedWithError(finishedFlag, fetchRes, err, url), req.destroy();
+                _markFinishedWithError(finishedFlag, fetchRes, err, url);
+                req.destroy();
             });
         }
         else res.pipe(fetchRes);

@@ -253,14 +253,14 @@ class MailComposer {
      * @returns {MimeNode} 创建的内容节点
      */
     _createContentNode(parentNode, element = {}) {
-        const { encoding, filename, headers, cid, contentTransferEncoding, contentType, contentDisposition,
-            content = '', raw } = element;
+        element.content = element.content || '';
+
         const rEF = resetRegex(regexs.ENCODING_FORMAT);
-        const eEncoding = (encoding || 'utf8').toString().toLowerCase().replace(rEF, '');
+        const mainEncoding = (element.encoding || 'utf8').toString().toLowerCase().replace(rEF, '');
 
         const { baseBoundary, textEncoding, boundaryPrefix, disableUrlAccess, disableFileAccess, normalizeHeaderKey,
-            newline, encoding: mEncoding } = this.mail
-
+            newline, encoding } = this.mail
+        const { filename, headers, cid, contentTransferEncoding, contentType, contentDisposition, content, raw } = element;
         // 创建节点（根节点或子节点）
         const node = !parentNode ? new MimeNode(contentType, {
             filename, baseBoundary, textEncoding, boundaryPrefix, disableUrlAccess, disableFileAccess, normalizeHeaderKey, newline
@@ -273,7 +273,7 @@ class MailComposer {
         const rCC = resetRegex(regexs.CID_CLEAN), CTE = 'Content-Transfer-Encoding';
         if (cid) node.setHeader('Content-Id', `<${cid.replace(rCC, '')}>`);
         if (contentTransferEncoding) node.setHeader(CTE, contentTransferEncoding);
-        else if (mEncoding && regexs.TEXT_TYPE.test(contentType)) node.setHeader(CTE, mEncoding);
+        else if (encoding && regexs.TEXT_TYPE.test(contentType)) node.setHeader(CTE, encoding);
 
         // 设置内容处置方式
         if (!regexs.TEXT_TYPE.test(contentType) || contentDisposition || filename) node.setHeader
@@ -281,8 +281,8 @@ class MailComposer {
 
         // 处理内容编码
         let newContent = content;
-        if (typeof newContent === 'string' && !['utf8', 'usascii', 'ascii'].includes(eEncoding))
-            newContent = Buffer.from(newContent, eEncoding);
+        if (typeof newContent === 'string' && !['utf8', 'usascii', 'ascii'].includes(mainEncoding))
+            newContent = Buffer.from(newContent, mainEncoding);
 
         raw ? node.setRaw(raw) : node.setContent(newContent);  // 设置节点内容
         return node;

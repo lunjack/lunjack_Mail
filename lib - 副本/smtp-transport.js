@@ -39,7 +39,7 @@ class SmtpTransport extends EventEmitter {
 
         if (!hasAuth) return false;
         // 根据认证类型处理不同的认证方式
-        const { type, service, user, pass, options, method = '' } = authData
+        const { type, service, user, pass, options, method } = authData
         const newType = (type || '').toString().toUpperCase()
         if (newType === 'OAUTH2') {
             if (!service && !user) return false;
@@ -53,7 +53,7 @@ class SmtpTransport extends EventEmitter {
         // 否则使用LOGIN认证方式
         return {
             type: newType || 'LOGIN', user, credentials: { user: user || '', pass, options },
-            method: method?.trim().toUpperCase() || this.options.authMethod || ''
+            method: (method || '').trim().toUpperCase() || this.options.authMethod || false
         };
     }
 

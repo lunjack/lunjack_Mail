@@ -255,7 +255,7 @@ class SmtpConnection extends EventEmitter {
 
         const { method = '', oauth2, credentials, user, pass, options } = this._auth = authData;
         // 选择SASL认证方法
-        this._authMethod = method.toString().trim().toUpperCase();
+        this._authMethod = method.toString().trim().toUpperCase() || false;
         // 如果没有指定认证方法，则使用XOAUTH2认证，如果没有OAuth2凭据，则使用PLAIN认证
         if (!this._authMethod && oauth2 && !credentials) this._authMethod = 'XOAUTH2';
         else if (!this._authMethod || (this._authMethod === 'XOAUTH2' && !oauth2))
@@ -639,9 +639,9 @@ class SmtpConnection extends EventEmitter {
         from = ((from?.address) || from).toString().trim();
         if (!from) return callback(this._formatError('发件人地址不能为空', 'EENVELOPE', false, 'API'));
         // 处理收件人地址
-        to = [].concat(to || []).map(to => ((to?.address) || to || '').toString().trim()).filter(ad => ad);
+        to = [].concat(to || []).map((to = '') => ((to?.address) || to).toString().trim()).filter(ad => ad);
         if (!to.length) return callback(this._formatError('未定义收件人', 'EENVELOPE', false, 'API'));
-        to = [...new Set(to)]; // 去重
+        this._envelope.from = from, this._envelope.to = to = [...new Set(to)]; // 赋值回有效地址
         // 验证单个地址并检测非ASCII字符
         const _validateAddress = (address, type) => {
             if (regexs.INVALID_ADDRESS_CHARS.test(address)) errors.push(`无效的${type}: ${JSON.stringify(address)}`);
@@ -686,8 +686,7 @@ class SmtpConnection extends EventEmitter {
 
     // 设置DSN信封属性
     _setDsnEnvelope(params) {
-        const { ret: ret_, return: return_, envid: envid_, id = '', notify: notify_, recipient, orcpt: orcpt_ } = params;
-        let ret = (ret_ || return_ || '').toString().toUpperCase() || null;
+        let ret = (params.ret || params.return || '').toString().toUpperCase() || null;
         if (ret)
             switch (ret) {
                 case 'HDRS':
@@ -702,8 +701,8 @@ class SmtpConnection extends EventEmitter {
 
         if (ret && !['FULL', 'HDRS'].includes(ret)) throw new Error(`ret: ${JSON.stringify(ret)}`);
 
-        const envid = (envid_ || id).toString() || null;
-        let notify = notify_ || null;
+        const envid = (params.envid || params.id || '').toString() || null;
+        let notify = params.notify || null;
         if (notify) {
             if (typeof notify === 'string') notify = notify.split(',');
 
@@ -715,7 +714,7 @@ class SmtpConnection extends EventEmitter {
             notify = notify.join(',');
         }
 
-        let orcpt = (recipient || orcpt_ || '').toString() || null;
+        let orcpt = (params.recipient || params.orcpt || '').toString() || null;
         if (orcpt && !orcpt.includes(';')) orcpt = `rfc822;${orcpt}`;
 
         return { ret, envid, notify, orcpt };

@@ -15,11 +15,11 @@ class PoolResource extends EventEmitter {
     constructor(pool) {
         super();
         this.pool = pool, this.options = pool.options, this.logger = this.pool.logger; // 所属连接池,连接选项,日志记录器
-        const { auth, authMethod } = this.options;
+        const { auth } = this.options;
 
         // 配置认证信息
         if (auth) {
-            const { user = '', pass, type, method = '', options } = auth;
+            const { user = '', pass, type, method, options } = auth;
             const newType = type.toString().toUpperCase();
 
             if (newType === 'OAUTH2') {
@@ -31,7 +31,7 @@ class PoolResource extends EventEmitter {
             else if (user || pass) {
                 this.auth = {
                     type: newType || 'LOGIN', user, credentials: { user, pass, options },
-                    method: method?.trim().toUpperCase() || authMethod || ''
+                    method: method?.trim().toUpperCase() || this.options.authMethod || false
                 };
             }
         }
@@ -47,12 +47,12 @@ class PoolResource extends EventEmitter {
      */
     connect(callback) {
         // 从连接池获取socket
-        this.pool.getSocket(this.options, (err, socketO) => {
+        this.pool.getSocket(this.options, (err, socketOptions) => {
             if (err) return callback(err);
             let returned = false;    // 防止重复回调的标志
 
             // 使用公共函数处理代理socket和创建连接
-            const { options: newOptions, connection } = createProxyConnection(this.options, this.logger, socketO, SmtpConnection);
+            const { options: newOptions, connection } = createProxyConnection(this.options, this.logger, socketOptions, SmtpConnection);
 
             function cleanup() {
                 if (returned) return;

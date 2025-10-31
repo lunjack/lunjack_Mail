@@ -44,11 +44,11 @@ class MailMessage {
 
         // 处理附件
         attachments?.forEach((attachment, i) => {
-            const { filename, path, href = '', contentType } = attachment;
+            const { filename, path, href, contentType } = attachment;
             let newFname = filename;
             // 如果没有文件名，则从路径或href中提取，或使用默认名称
             if (!newFname) {
-                newFname = (path || href).split('/').pop().split('?').shift() || `'attachment-${(i + 1)}`;
+                newFname = (path || href || '').split('/').pop().split('?').shift() || `'attachment-${(i + 1)}`;
                 if (!newFname.includes('.')) newFname += `.${detectExtension(contentType)}`; // 如果没有扩展名，则根据内容类型添加
                 attachment.filename = newFname; // 设置回attachment对象
             }

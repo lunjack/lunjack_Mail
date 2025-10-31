@@ -356,7 +356,7 @@ class MimeNode {
 
             value = this._encodeHeaderValue(key, value);
 
-            if (!value.toString().trim()) return; // 跳过空行
+            if (!(value || '').toString().trim()) return; // 跳过空行
             // 如果存在自定义的normalizeHeaderKey函数，则使用它来规范化头部键
             if (typeof this.normalizeHeaderKey === 'function') {
                 let normalized = this.normalizeHeaderKey(key, value);

@@ -286,12 +286,13 @@ function _processRFC2231Params(params) {
 function detectMimeType(filename) {
     if (!filename) return defaultMimeType; // 如果文件名为空，返回默认MIME类型
 
-    const { ext, name = '' } = path.parse(filename);     // 解析文件路径获取扩展名
+    const parsed = path.parse(filename);     // 解析文件路径获取扩展名
     // 提取扩展名（去掉点号），处理查询参数，转换为小写
-    const extension = (ext.substring(1) || name).split('?').shift().trim().toLowerCase();
+    const extension = (parsed.ext.substring(1) || parsed.name || '').split('?').shift().trim().toLowerCase();
+    let value = defaultMimeType;
 
     // 如果在扩展名映射表中找到对应项，则使用对应的MIME类型
-    const value = EXTENSIONS.has(extension) ? EXTENSIONS.get(extension) : defaultMimeType;
+    if (EXTENSIONS.has(extension)) value = EXTENSIONS.get(extension);
     return Array.isArray(value) ? value[0] : value; // 如果值是数组，返回第一个元素;否则返回值
 }
 
@@ -300,12 +301,12 @@ function detectMimeType(filename) {
  * @param {string} mimeType - 要检测的MIME类型
  * @returns {string} 检测到的文件扩展名
  */
-function detectExtension(mimeType = '') {
+function detectExtension(mimeType) {
     // 如果MIME类型为空，返回默认扩展名
     if (!mimeType) return defaultExtension;
 
     // 处理MIME类型字符串：转换为小写，分割类型和子类型
-    const parts = mimeType.toLowerCase().trim().split('/');
+    const parts = (mimeType || '').toLowerCase().trim().split('/');
     const rootType = parts.shift().trim(), subType = parts.join('/').trim(); // 主类型（如：application、text等）和子类型
 
     // 构建完整的MIME类型并查找对应的扩展名
@@ -382,9 +383,9 @@ function foldLines(str = '', lineLength = 76, afterSpace) {
  * @param {Number} [maxLength=50] 生成块的最大长度
  * @return {Array} 编码键和头的列表
  */
-function _buildHeaderParam(key, data = '', maxLength = 50) {
+function _buildHeaderParam(key, data, maxLength = 50) {
     const list = [];
-    let encodedStr = typeof data === 'string' ? data : data.toString();
+    let encodedStr = typeof data === 'string' ? data : (data || '').toString();
 
     // 处理仅ASCII文本
     if (isPlainText(data, true)) {
