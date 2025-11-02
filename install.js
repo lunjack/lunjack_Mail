@@ -55,13 +55,13 @@ const formattedContent = `
 // 检查并创建示例文件
 function checkAndCreateMailFile() {
     console.log('🔍 检查 Mail.js 文件...');
-    console.log('📁 项目根目录: ' + projectRoot);
+    console.log(`📁 项目根目录:${projectRoot}`);
     try {
         if (fs.existsSync(projectMailPath)) return true;  // 如果存在Mail.js文件，则返回true并结束函数
-        console.log('⚠️  在项目根目录未找到 Mail.js 文件，正在创建...');
+        console.log('⚠️ 在项目根目录未找到 Mail.js 文件，正在创建...');
 
         fs.writeFileSync(projectMailPath, formattedContent, 'utf8'); // 创建Mail.js文件并写入示例内容
-        console.log('✓ 已创建 Mail.js 示例文件: ' + projectMailPath);
+        console.log(`✓ 已创建 Mail.js 示例文件:${projectMailPath}`);
         console.log('💡 请编辑 Mail.js 文件，根据您的邮箱服务商配置SMTP信息');
         return true;
     } catch (error) {
