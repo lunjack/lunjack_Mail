@@ -105,15 +105,8 @@ function validateConfig(config) {
     }
     else errors.push('配置应为字符串或对象');
 
-    return {
-        valid: errors.length === 0,
-        errors,
-        warnings: warnings.length > 0 ? warnings : undefined
-    };
+    return { valid: errors.length === 0, errors, warnings: warnings.length > 0 ? warnings : undefined };
 }
 
 // 导出
-module.exports = {
-    createTransport,
-    validateConfig
-};
+module.exports = { createTransport, validateConfig };
