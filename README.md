@@ -37,7 +37,7 @@ npm i lunjack-mail
 
 ## 快速开始
 
-### 基本使用
+### 邮件配置及发送(标准配置示例)
 
 ```javascript
 const mail = require('lunjack-mail');
@@ -75,14 +75,12 @@ transporter.sendMail({
 });
 ```
 
-### 常用邮箱服务商配置参考
+### 常用邮箱配置示例(简写)
 
 #### Gmail
 ```javascript
 const transporter = mail.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    service: 'Gmail',
     auth: {
         user: 'your-email@gmail.com',
         pass: 'your-app-password' // 需要启用两步验证并使用应用专用密码
@@ -93,9 +91,7 @@ const transporter = mail.createTransport({
 #### QQ邮箱
 ```javascript
 const transporter = mail.createTransport({
-    host: 'smtp.qq.com',
-    port: 587,
-    secure: false,
+     service: 'QQ',
     auth: {
         user: 'your-email@qq.com',
         pass: 'your-authorization-code' // QQ邮箱授权码，非登录密码
@@ -106,9 +102,7 @@ const transporter = mail.createTransport({
 #### 163邮箱
 ```javascript
 const transporter = mail.createTransport({
-    host: 'smtp.163.com',
-    port: 465,
-    secure: true,
+    service: '163',
     auth: {
         user: 'your-email@163.com',
         pass: 'your-authorization-code' // 163邮箱授权码
@@ -213,7 +207,252 @@ async function sendEmail() {
 
 sendEmail();
 ```
+---
+：#其它使用示例:
+## 1. SMTP 连接池（高并发场景）
 
+```javascript
+const nodemailer = require('nodemailer');
+
+// 1. 创建连接池传输器
+const transporter = nodemailer.createTransport({
+  pool: true, // 启用连接池
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'your-email@gmail.com',
+    pass: 'your-app-password'
+  },
+  maxConnections: 5,    // 最大连接数
+  maxMessages: 100,     // 每个连接最大邮件数
+  rateDelta: 1000,      // 速率限制时间间隔
+  rateLimit: 5          // 每秒最多发送5封
+});
+
+// 2. 发送多封邮件的示例
+const emails = [
+  { to: 'user1@example.com', name: '用户1' },
+  { to: 'user2@example.com', name: '用户2' },
+  { to: 'user3@example.com', name: '用户3' }
+];
+
+async function sendBulkEmails() {
+  for (const email of emails) {
+    const mailOptions = {
+      from: '"系统通知" <noreply@example.com>',
+      to: email.to,
+      subject: `您好 ${email.name}`,
+      html: `<p>亲爱的 ${email.name}，这是一封测试邮件</p>`
+    };
+
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`发送给 ${email.name} 成功:`, info.messageId);
+    } catch (error) {
+      console.log(`发送给 ${email.name} 失败:`, error);
+    }
+  }
+
+  // 关闭连接池
+  transporter.close();
+}
+
+sendBulkEmails();
+```
+
+## 2. Sendmail 传输（Linux/Unix 系统）
+
+```javascript
+const nodemailer = require('nodemailer');
+
+// 1. 创建Sendmail传输器
+const transporter = nodemailer.createTransport({
+  sendmail: true,
+  path: '/usr/sbin/sendmail' // 默认路径，通常不需要指定
+});
+
+// 2. 配置邮件内容
+const mailOptions = {
+  from: '"系统" <system@server.com>',
+  to: 'admin@example.com',
+  subject: '服务器报警',
+  text: 'CPU使用率超过90%，请及时处理！',
+  html: '<h1>服务器报警</h1><p>CPU使用率超过90%，请及时处理！</p>'
+};
+
+// 3. 发送邮件
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log('发送失败:', error);
+  } else {
+    console.log('发送成功!');
+    console.log('响应:', info.response);
+  }
+});
+```
+
+## 3. 流传输（用于测试和开发）
+
+```javascript
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+
+// 1. 创建流传输器
+const transporter = nodemailer.createTransport({
+  streamTransport: true,
+  buffer: true,        // 将邮件内容缓冲到内存
+  newline: 'unix'      // 使用Unix换行符
+});
+
+// 2. 配置邮件内容
+const mailOptions = {
+  from: '"测试" <test@example.com>',
+  to: 'developer@example.com',
+  subject: '测试邮件 - 不实际发送',
+  text: '这封邮件不会实际发送，只会输出到控制台或文件',
+  html: '<b>HTML内容</b>',
+  attachments: [
+    {
+      filename: 'test.txt',
+      content: '这是附件内容'
+    }
+  ]
+};
+
+// 3. 发送邮件（实际上只是生成邮件源码）
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log('生成邮件失败:', error);
+  } else {
+    console.log('邮件源码:');
+    console.log(info.message.toString());
+
+    // 可选：保存到文件
+    fs.writeFileSync('debug-email.eml', info.message.toString());
+    console.log('邮件已保存到 debug-email.eml');
+  }
+});
+```
+
+## 4. JSON 传输（用于调试）
+
+```javascript
+const nodemailer = require('nodemailer');
+
+// 1. 创建JSON传输器
+const transporter = nodemailer.createTransport({
+  jsonTransport: true
+});
+
+// 2. 配置邮件内容
+const mailOptions = {
+  from: '"调试" <debug@example.com>',
+  to: 'test@example.com, test2@example.com',
+  subject: '调试邮件',
+  text: '这封邮件会返回JSON格式的信息',
+  html: '<b>调试内容</b>'
+};
+
+// 3. 发送邮件
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log('错误:', error);
+  } else {
+    console.log('邮件信息（JSON格式）:');
+    console.log(JSON.stringify(info.message, null, 2));
+
+    // info.message 包含：
+    // - envelope: 信封信息（发件人、收件人）
+    // - messageId: 邮件ID
+    // - response: 响应信息
+  }
+});
+```
+
+## 5. SES 传输（AWS 亚马逊服务）
+
+```javascript
+const nodemailer = require('nodemailer');
+const { SESClient } = require('@aws-sdk/client-ses');
+
+// 1. 配置 AWS SES
+const sesClient = new SESClient({
+  region: 'us-east-1', // 你的AWS区域
+  credentials: {
+    accessKeyId: '你的AccessKey',
+    secretAccessKey: '你的SecretKey'
+  }
+});
+
+// 2. 创建SES传输器
+const transporter = nodemailer.createTransport({
+  SES: {
+    ses: sesClient,
+    aws: {}
+  }
+});
+
+// 3. 配置邮件内容
+const mailOptions = {
+  from: '"AWS SES" <verified-email@yourdomain.com>', // 必须是验证过的邮箱
+  to: 'recipient@example.com',
+  subject: '来自AWS SES的测试邮件',
+  text: '这封邮件通过Amazon SES发送',
+  html: '<h1>AWS SES测试</h1><p>这封邮件通过Amazon SES发送</p>'
+};
+
+// 4. 发送邮件
+async function sendWithSES() {
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('SES发送成功!');
+    console.log('Message ID:', info.messageId);
+    console.log('响应:', info.response);
+  } catch (error) {
+    console.log('SES发送失败:', error);
+  }
+}
+
+sendWithSES();
+```
+
+## 6. 使用连接字符串的简便方式
+
+```javascript
+const nodemailer = require('nodemailer');
+
+// 1. 使用连接字符串创建传输器
+const transporter = nodemailer.createTransport(
+  'smtps://username:password@smtp.gmail.com:465'
+);
+
+// 2. 配置邮件内容
+const mailOptions = {
+  from: '"简写方式" <user@gmail.com>',
+  to: 'friend@example.com',
+  subject: '连接字符串示例',
+  text: '使用连接字符串配置SMTP'
+};
+
+// 3. 发送邮件
+transporter.sendMail(mailOptions)
+  .then(info => {
+    console.log('发送成功:', info.messageId);
+  })
+  .catch(error => {
+    console.log('发送失败:', error);
+  });
+```
+
+每个示例都包含了：
+1. **配置传输器** - 创建特定类型的邮件传输器
+2. **设置邮件内容** - 定义发件人、收件人、主题、内容等
+3. **发送邮件** - 执行发送操作并处理结果
+
+对于生产环境，推荐使用 SMTP 或 SES；对于开发和测试，可以使用流传输或 JSON 传输;
+
+---
 ## 错误处理
 
 库提供了详细的错误信息，帮助您快速定位问题：

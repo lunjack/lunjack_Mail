@@ -11,15 +11,19 @@ const formattedContent = `
     const mail = require('lunjack-mail');
     // 邮箱配置示例 - 请根据您的邮箱服务商修改以下配置
     const transporter = mail.createTransport({
-        // 邮箱服务商SMTP服务器地址(Gmail: 'smtp.gmail.com'; QQ: 'smtp.qq.com'; 163: 'smtp.163.com')
-        host: 'smtp.your-email-provider.com',
-        port: 587,      // 端口号(Gmail: 465; QQ: 587; 163: 465)
-        secure: false,  // 是否使用SSL/TLS
+        // 步骤1:填写服务器地址,端口和是否启用SSL/TLS
+           // 常见邮箱,填写服务商名称(如:Gmail, QQ; 163,139等等)即可
+              service: 'your-email-provider',
+           // 非常见邮箱须填写如下项:
+           // host: 'smtp.your-email-provider.com', // 邮箱服务商SMTP服务器地址
+           // port: 587,                            // 端口号(如:465,587,465等等)
+           // secure: true,                         // 是否使用SSL/TLS
 
-        auth: {
-            user: 'your-email@example.com',       // 您的邮箱地址
-            pass: 'your-password-or-app-password' // 您的邮箱密码或授权码(Gmail需要应用专用密码，QQ邮箱需要授权码)
-        }
+       // 步骤2:填写SMTP服务器的账号和密码
+            auth: {
+                user: 'your-email@example.com',       // 您的邮箱地址
+                pass: 'your-password-or-app-password' // 您的邮箱密码或授权码(Gmail需要应用专用密码，QQ邮箱需要授权码)
+            }
     });
 
     // 发送邮件示例

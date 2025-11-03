@@ -24,6 +24,12 @@
         "port": 465,
         "secure": true
     },
+    "139": {
+        "description": "139 Mail (China Mobile)",
+        "host": "smtp.139.com",
+        "port": 465,
+        "secure": true
+    },
     "Aliyun": {
         "description": "Alibaba Cloud Mail",
         "domains": [
