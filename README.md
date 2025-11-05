@@ -212,10 +212,10 @@ sendEmail();
 ## 1. SMTP 连接池（高并发场景）
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 
 // 1. 创建连接池传输器
-const transporter = nodemailer.createTransport({
+const transporter = mail.createTransport({
   pool: true, // 启用连接池
   host: 'smtp.gmail.com',
   port: 465,
@@ -264,10 +264,10 @@ sendBulkEmails();
 ## 2. Sendmail 传输（Linux/Unix 系统）
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 
 // 1. 创建Sendmail传输器
-const transporter = nodemailer.createTransport({
+const transporter = mail.createTransport({
   sendmail: true,
   path: '/usr/sbin/sendmail' // 默认路径，通常不需要指定
 });
@@ -295,11 +295,11 @@ transporter.sendMail(mailOptions, (error, info) => {
 ## 3. 流传输（用于测试和开发）
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 const fs = require('fs');
 
 // 1. 创建流传输器
-const transporter = nodemailer.createTransport({
+const transporter = mail.createTransport({
   streamTransport: true,
   buffer: true,        // 将邮件内容缓冲到内存
   newline: 'unix'      // 使用Unix换行符
@@ -338,10 +338,10 @@ transporter.sendMail(mailOptions, (error, info) => {
 ## 4. JSON 传输（用于调试）
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 
 // 1. 创建JSON传输器
-const transporter = nodemailer.createTransport({
+const transporter = mail.createTransport({
   jsonTransport: true
 });
 
@@ -373,7 +373,7 @@ transporter.sendMail(mailOptions, (error, info) => {
 ## 5. SES 传输（AWS 亚马逊服务）
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 const { SESClient } = require('@aws-sdk/client-ses');
 
 // 1. 配置 AWS SES
@@ -386,7 +386,7 @@ const sesClient = new SESClient({
 });
 
 // 2. 创建SES传输器
-const transporter = nodemailer.createTransport({
+const transporter = mail.createTransport({
   SES: {
     ses: sesClient,
     aws: {}
@@ -420,10 +420,10 @@ sendWithSES();
 ## 6. 使用连接字符串的简便方式
 
 ```javascript
-const nodemailer = require('nodemailer');
+const mail = require('lunjack-mail');
 
 // 1. 使用连接字符串创建传输器
-const transporter = nodemailer.createTransport(
+const transporter = mail.createTransport(
   'smtps://username:password@smtp.gmail.com:465'
 );
 
