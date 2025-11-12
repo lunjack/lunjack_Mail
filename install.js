@@ -12,7 +12,7 @@ const formattedContent = `
     // 邮箱配置示例 - 请根据您的邮箱服务商修改以下配置
     const transporter = mail.createTransport({
         // 步骤1:填写服务器地址,端口和是否启用SSL/TLS
-           // 常见邮箱,填写服务商名称(如:Gmail, QQ; 163,139等等)即可
+           // 常见邮箱,填写服务商名称(如:Gmail, QQ; 163,139等等)或域名后缀即可
               service: 'your-email-provider',
            // 非常见邮箱须填写如下项:
            // host: 'smtp.your-email-provider.com', // 邮箱服务商SMTP服务器地址
