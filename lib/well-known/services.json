@@ -1,6 +1,9 @@
 {
     "1und1": {
         "description": "1&1 Mail (German hosting provider)",
+        "domains": [
+            "1und1.de"
+        ],
         "host": "smtp.1und1.de",
         "port": 465,
         "secure": true,
@@ -8,24 +11,36 @@
     },
     "126": {
         "description": "126 Mail (NetEase)",
+        "domains": [
+            "126.com"
+        ],
         "host": "smtp.126.com",
         "port": 465,
         "secure": true
     },
     "163": {
         "description": "163 Mail (NetEase)",
+        "domains": [
+            "163.com"
+        ],
         "host": "smtp.163.com",
         "port": 465,
         "secure": true
     },
     "189": {
         "description": "189 Mail (NetEase)",
+        "domains": [
+            "189.cn"
+        ],
         "host": "smtp.189.cn",
         "port": 465,
         "secure": true
     },
     "139": {
         "description": "139 Mail (China Mobile)",
+        "domains": [
+            "139.com"
+        ],
         "host": "smtp.139.com",
         "port": 465,
         "secure": true
@@ -39,8 +54,14 @@
         "port": 465,
         "secure": true
     },
-    "AliyunQiye": {
+    "QiyeAliyun": {
         "description": "Alibaba Cloud Enterprise Mail",
+        "domains": [
+            "qiye.aliyun.com"
+        ],
+        "aliases": [
+            "AliyunQiye"
+        ],
         "host": "smtp.qiye.aliyun.com",
         "port": 465,
         "secure": true
@@ -69,10 +90,10 @@
     },
     "Bluewin": {
         "description": "Bluewin (Swiss email provider)",
-        "host": "smtpauths.bluewin.ch",
         "domains": [
             "bluewin.ch"
         ],
+        "host": "smtpauths.bluewin.ch",
         "port": 465
     },
     "BOL": {
@@ -86,6 +107,9 @@
     },
     "DebugMail": {
         "description": "DebugMail (email testing service)",
+        "domains": [
+            "debugmail.io"
+        ],
         "host": "debugmail.io",
         "port": 25
     },
@@ -104,13 +128,16 @@
         "aliases": [
             "Dynect"
         ],
+        "domains": [
+            "dynect.net"
+        ],
         "host": "smtp.dynect.net",
         "port": 25
     },
     "ElasticEmail": {
         "description": "Elastic Email",
-        "aliases": [
-            "Elastic Email"
+        "domains": [
+            "elasticemail.com"
         ],
         "host": "smtp.elasticemail.com",
         "port": 465,
@@ -119,6 +146,9 @@
     "Ethereal": {
         "description": "Ethereal Email (email testing service)",
         "aliases": [
+            "Ethereal Email"
+        ],
+        "domains": [
             "ethereal.email"
         ],
         "host": "smtp.ethereal.email",
@@ -126,31 +156,33 @@
     },
     "FastMail": {
         "description": "FastMail",
-        "domains": [
+        "aliases": [
+            "FastMail",
             "fastmail.fm"
+        ],
+        "domains": [
+            "fastmail.com"
         ],
         "host": "smtp.fastmail.com",
         "port": 465,
         "secure": true
     },
-    "Feishu Mail": {
+    "Feishu": {
         "description": "Feishu Mail (Lark)",
         "aliases": [
-            "Feishu",
             "FeishuMail"
         ],
         "domains": [
-            "www.feishu.cn"
+            "feishu.cn"
         ],
         "host": "smtp.feishu.cn",
         "port": 465,
         "secure": true
     },
-    "Forward Email": {
+    "ForwardEmail": {
         "description": "Forward Email (email forwarding service)",
         "aliases": [
-            "FE",
-            "ForwardEmail"
+            "FE"
         ],
         "domains": [
             "forwardemail.net"
@@ -162,8 +194,10 @@
     "GandiMail": {
         "description": "Gandi Mail",
         "aliases": [
-            "Gandi",
-            "Gandi Mail"
+            "Gandi"
+        ],
+        "domains": [
+            "gandi.net"
         ],
         "host": "mail.gandi.net",
         "port": 587
@@ -183,6 +217,9 @@
     },
     "GMX": {
         "description": "GMX Mail",
+        "aliases": [
+            "GMX Mail"
+        ],
         "domains": [
             "gmx.com",
             "gmx.net",
@@ -193,29 +230,45 @@
     },
     "Godaddy": {
         "description": "GoDaddy Email (US)",
+        "aliases": [
+            "Godaddy Mail"
+        ],
+        "domains": [
+            "secureserver.net"
+        ],
         "host": "smtpout.secureserver.net",
         "port": 25
     },
     "GodaddyAsia": {
         "description": "GoDaddy Email (Asia)",
+        "domains": [
+            "asia.secureserver.net"
+        ],
         "host": "smtp.asia.secureserver.net",
         "port": 25
     },
     "GodaddyEurope": {
         "description": "GoDaddy Email (Europe)",
+        "domains": [
+            "europe.secureserver.net"
+        ],
         "host": "smtp.europe.secureserver.net",
         "port": 25
     },
     "hot.ee": {
         "description": "Hot.ee (Estonian email provider)",
+        "aliases": [
+            "HotEe"
+        ],
+        "domains": [
+            "hot.ee"
+        ],
         "host": "mail.hot.ee"
     },
     "Hotmail": {
         "description": "Outlook.com / Hotmail",
         "aliases": [
-            "Outlook",
-            "Outlook.com",
-            "Hotmail.com"
+            "Outlook"
         ],
         "domains": [
             "hotmail.com",
@@ -232,7 +285,8 @@
         ],
         "domains": [
             "me.com",
-            "mac.com"
+            "mac.com",
+            "icloud.com"
         ],
         "host": "smtp.mail.me.com",
         "port": 587
@@ -241,6 +295,7 @@
         "description": "Infomaniak Mail (Swiss hosting provider)",
         "host": "mail.infomaniak.com",
         "domains": [
+            "infomaniak.com",
             "ik.me",
             "ikmail.com",
             "etik.com"
@@ -262,78 +317,137 @@
     },
     "Loopia": {
         "description": "Loopia (Swedish hosting provider)",
+        "domains": [
+            "loopia.se"
+        ],
         "host": "mailcluster.loopia.se",
         "port": 465
     },
     "Loops": {
         "description": "Loops",
+        "domains": [
+            "loops.so"
+        ],
         "host": "smtp.loops.so",
         "port": 587
     },
     "mail.ee": {
         "description": "Mail.ee (Estonian email provider)",
+        "aliases": [
+            "MailEe"
+        ],
+        "domains": [
+            "mail.ee"
+        ],
         "host": "smtp.mail.ee"
     },
     "Mail.ru": {
         "description": "Mail.ru",
+        "aliases": [
+            "MailRu"
+        ],
+        "domains": [
+            "mail.ru"
+        ],
         "host": "smtp.mail.ru",
         "port": 465,
         "secure": true
     },
     "Mailcatch.app": {
         "description": "Mailcatch (email testing service)",
+        "aliases": [
+            "Mailcatch"
+        ],
+        "domains": [
+            "mailcatch.app"
+        ],
         "host": "sandbox-smtp.mailcatch.app",
         "port": 2525
     },
     "Maildev": {
         "description": "MailDev (local email testing)",
+        "domains": [
+            "maildev.local"
+        ],
         "port": 1025,
         "ignoreTLS": true
     },
     "MailerSend": {
         "description": "MailerSend",
+        "domains": [
+            "mailersend.net"
+        ],
         "host": "smtp.mailersend.net",
         "port": 587
     },
     "Mailgun": {
         "description": "Mailgun",
+        "domains": [
+            "mailgun.org"
+        ],
         "host": "smtp.mailgun.org",
         "port": 465,
         "secure": true
     },
     "Mailjet": {
         "description": "Mailjet",
+        "domains": [
+            "mailjet.com",
+            "in.mailjet.com"
+        ],
         "host": "in.mailjet.com",
         "port": 587
     },
     "Mailosaur": {
         "description": "Mailosaur (email testing service)",
+        "domains": [
+            "mailosaur.io",
+            "mailosaur.net"
+        ],
         "host": "mailosaur.io",
         "port": 25
     },
     "Mailtrap": {
         "description": "Mailtrap",
+        "domains": [
+            "mailtrap.io",
+            "mailtrap.com"
+        ],
         "host": "live.smtp.mailtrap.io",
         "port": 587
     },
     "Mandrill": {
         "description": "Mandrill (by Mailchimp)",
+        "domains": [
+            "mandrillapp.com",
+            "mailchimp.com"
+        ],
         "host": "smtp.mandrillapp.com",
         "port": 587
     },
     "Naver": {
         "description": "Naver Mail (Korean email provider)",
+        "domains": [
+            "naver.com",
+            "navercorp.com"
+        ],
         "host": "smtp.naver.com",
         "port": 587
     },
     "OhMySMTP": {
         "description": "OhMySMTP (email delivery service)",
+        "domains": [
+            "ohmysmtp.com"
+        ],
         "host": "smtp.ohmysmtp.com",
         "port": 587,
         "secure": false
     },
     "One": {
         "description": "One.com Email",
+        "domains": [
+            "one.com"
+        ],
         "host": "send.one.com",
         "port": 465,
         "secure": true
@@ -344,12 +458,19 @@
             "OMB",
             "openmailbox.org"
         ],
+        "domains": [
+            "openmailbox.org"
+        ],
         "host": "smtp.openmailbox.org",
         "port": 465,
         "secure": true
     },
     "Outlook365": {
         "description": "Microsoft 365 / Office 365",
+        "domains": [
+            "office365.com",
+            "microsoft.com"
+        ],
         "host": "smtp.office365.com",
         "port": 587,
         "secure": false
@@ -358,6 +479,10 @@
         "description": "Postmark",
         "aliases": [
             "PostmarkApp"
+        ],
+        "domains": [
+            "postmarkapp.com",
+            "postmark.com"
         ],
         "host": "smtp.postmarkapp.com",
         "port": 2525
@@ -379,12 +504,6 @@
         "host": "smtp.protonmail.ch",
         "port": 587,
         "requireTLS": true
-    },
-    "qiye.aliyun": {
-        "description": "Alibaba Mail Enterprise Edition",
-        "host": "smtp.mxhichina.com",
-        "port": "465",
-        "secure": true
     },
     "QQ": {
         "description": "QQ Mail",
@@ -409,6 +528,9 @@
     },
     "Resend": {
         "description": "Resend",
+        "domains": [
+            "resend.com"
+        ],
         "host": "smtp.resend.com",
         "port": 465,
         "secure": true
@@ -424,11 +546,19 @@
     },
     "SendCloud": {
         "description": "SendCloud (Chinese email delivery)",
+        "domains": [
+            "sendcloud.net",
+            "sendcloud.org"
+        ],
         "host": "smtp.sendcloud.net",
         "port": 2525
     },
     "SendGrid": {
         "description": "SendGrid",
+        "domains": [
+            "sendgrid.net",
+            "sendgrid.com"
+        ],
         "host": "smtp.sendgrid.net",
         "port": 587
     },
@@ -437,18 +567,59 @@
         "aliases": [
             "Brevo"
         ],
+        "domains": [
+            "brevo.com",
+            "sendinblue.com"
+        ],
         "host": "smtp-relay.brevo.com",
         "port": 587
     },
     "SendPulse": {
         "description": "SendPulse",
+        "domains": [
+            "sendpulse.com",
+            "smtp-pulse.com"
+        ],
         "host": "smtp-pulse.com",
         "port": 465,
         "secure": true
     },
-    "SES": {
+    "SES-US-EAST-1": {
         "description": "AWS SES US East (N. Virginia)",
+        "aliases": [
+            "SES"
+        ],
         "host": "email-smtp.us-east-1.amazonaws.com",
+        "port": 465,
+        "secure": true
+    },
+    "SES-US-EAST-2": {
+        "description": "AWS SES US East (Ohio)",
+        "host": "email-smtp.us-east-2.amazonaws.com",
+        "port": 465,
+        "secure": true
+    },
+    "SES-US-GOV-EAST-1": {
+        "description": "AWS SES GovCloud (US-East)",
+        "host": "email-smtp.us-gov-east-1.amazonaws.com",
+        "port": 465,
+        "secure": true
+    },
+    "SES-US-GOV-WEST-1": {
+        "description": "AWS SES GovCloud (US-West)",
+        "host": "email-smtp.us-gov-west-1.amazonaws.com",
+        "port": 465,
+        "secure": true
+    },
+    "SES-US-WEST-1": {
+        "description": "AWS SES US West (N. California)",
+        "host": "email-smtp.us-west-1.amazonaws.com",
+        "port": 465,
+        "secure": true
+    },
+    "SES-US-WEST-2": {
+        "description": "AWS SES US West (Oregon)",
+        "host": "email-smtp.us-west-2.amazonaws.com",
         "port": 465,
         "secure": true
     },
@@ -530,42 +701,6 @@
         "port": 465,
         "secure": true
     },
-    "SES-US-EAST-1": {
-        "description": "AWS SES US East (N. Virginia)",
-        "host": "email-smtp.us-east-1.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
-    "SES-US-EAST-2": {
-        "description": "AWS SES US East (Ohio)",
-        "host": "email-smtp.us-east-2.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
-    "SES-US-GOV-EAST-1": {
-        "description": "AWS SES GovCloud (US-East)",
-        "host": "email-smtp.us-gov-east-1.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
-    "SES-US-GOV-WEST-1": {
-        "description": "AWS SES GovCloud (US-West)",
-        "host": "email-smtp.us-gov-west-1.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
-    "SES-US-WEST-1": {
-        "description": "AWS SES US West (N. California)",
-        "host": "email-smtp.us-west-1.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
-    "SES-US-WEST-2": {
-        "description": "AWS SES US West (Oregon)",
-        "host": "email-smtp.us-west-2.amazonaws.com",
-        "port": 465,
-        "secure": true
-    },
     "Seznam": {
         "description": "Seznam Email (Czech email provider)",
         "aliases": [
@@ -583,6 +718,9 @@
     },
     "SMTP2GO": {
         "description": "SMTP2GO",
+        "domains": [
+            "smtp2go.com"
+        ],
         "host": "mail.smtp2go.com",
         "port": 2525
     },
@@ -593,7 +731,8 @@
             "SparkPost Mail"
         ],
         "domains": [
-            "sparkpost.com"
+            "sparkpost.com",
+            "sparkpostmail.com"
         ],
         "host": "smtp.sparkpostmail.com",
         "port": 587,
@@ -601,6 +740,9 @@
     },
     "Tipimail": {
         "description": "Tipimail (email delivery service)",
+        "domains": [
+            "tipimail.com"
+        ],
         "host": "smtp.tipimail.com",
         "port": 587
     },
@@ -639,12 +781,19 @@
         "aliases": [
             "Zimbra Collaboration"
         ],
+        "domains": [
+            "zimbra.com"
+        ],
         "host": "smtp.zimbra.com",
         "port": 587,
         "requireTLS": true
     },
     "Zoho": {
         "description": "Zoho Mail",
+        "domains": [
+            "zoho.com",
+            "zohomail.com"
+        ],
         "host": "smtp.zoho.com",
         "port": 465,
         "secure": true,
