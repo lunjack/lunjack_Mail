@@ -429,7 +429,7 @@ const transporter = mail.createTransport(
 
 // 2. 配置邮件内容
 const mailOptions = {
-  from: '"简写方式" <user@gmail.com>',
+  from: '"测试" <user@gmail.com>',
   to: 'friend@example.com',
   subject: '连接字符串示例',
   text: '使用连接字符串配置SMTP'
