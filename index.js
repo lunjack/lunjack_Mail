@@ -67,10 +67,10 @@ function validateConfig(config) {
     // 否则,如果是配置对象
     else if (typeof config === 'object') {
         // 检查传输器类型
-        const transportTypes = ['SMTP', 'Sendmail', 'Stream', 'JSON', 'SES'];
-        const hasTransportType = transportTypes.some(type =>
-            config[type.toLowerCase()] || config[type] || config[`${type}Transport`]
-        );
+        const transportTypes = ['SMTP', 'Sendmail', 'Stream', 'JSON', 'SES'],
+            hasTransportType = transportTypes.some(type =>
+                config[type.toLowerCase()] || config[type] || config[`${type}Transport`]
+            );
 
         if (!hasTransportType && typeof config.send !== 'function') {
             // 默认为SMTP传输器，验证SMTP相关配置

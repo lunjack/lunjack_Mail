@@ -2,12 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 // 检查项目根目录
-const packageDir = __dirname;
-const projectRoot = path.resolve(packageDir, '../..'); // 向上两级到项目根目录
-const projectMailPath = path.join(projectRoot, 'Mail.js');
-
-// 示例文件内容 - 通用邮箱配置模板
-const formattedContent = `
+const packageDir = __dirname, projectRoot = path.resolve(packageDir, '../..'), // 向上两级到项目根目录
+    projectMailPath = path.join(projectRoot, 'Mail.js'),
+    // 示例文件内容 - 通用邮箱配置模板
+    formattedContent = `
     const mail = require('lunjack-mail');
     // 邮箱配置示例 - 请根据您的邮箱服务商修改以下配置
     const transporter = mail.createTransport({
@@ -58,15 +56,13 @@ const formattedContent = `
 
 // 检查并创建示例文件
 function checkAndCreateMailFile() {
-    console.log('🔍 检查 Mail.js 文件...');
-    console.log(`📁 项目根目录:${projectRoot}`);
+    console.log('🔍 检查 Mail.js 文件...'), console.log(`📁 项目根目录:${projectRoot}`);
     try {
         if (fs.existsSync(projectMailPath)) return true;  // 如果存在Mail.js文件，则返回true并结束函数
         console.log('⚠️ 在项目根目录未找到 Mail.js 文件，正在创建...');
 
         fs.writeFileSync(projectMailPath, formattedContent, 'utf8'); // 创建Mail.js文件并写入示例内容
-        console.log(`✓ 已创建 Mail.js 示例文件:${projectMailPath}`);
-        console.log('💡 请编辑 Mail.js 文件，根据您的邮箱服务商配置SMTP信息');
+        console.log(`✓ 已创建 Mail.js 示例文件:${projectMailPath}`), console.log('💡 请编辑 Mail.js 文件，根据您的邮箱服务商配置SMTP信息');
         return true;
     } catch (error) {
         console.error('✗ 创建 Mail.js 文件失败:', error.message);
